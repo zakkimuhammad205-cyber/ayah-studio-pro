@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayah Studio Pro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@700&family=Gulzar&family=Inter:wght@600;700&family=Montserrat:wght@600;700&family=Noto+Naskh+Arabic:wght@700&family=Noto+Nastaliq+Urdu:wght@500;700&family=Poppins:wght@600&family=Scheherazade+New:wght@700&family=Noto+Sans+Bengali:wght@600&family=Noto+Sans+Devanagari:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #050814;
+            --card: #0c132b;
+            --accent: #10b981;
+            --text: #f8fafc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            direction: ltr;
+        }
+
+        .wrap { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 12px; }
+
+        .box {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .lbl { font-size: 0.7rem; color: var(--accent); font-weight: 800; text-transform: uppercase; }
+
+        .row { display: flex; gap: 8px; }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1.5px solid var(--accent);
+            background: #050814;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        select option { background: #050814; color: #fff; }
+
+        .fonts-grid { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+        .fonts-grid::-webkit-scrollbar { display: none; }
+
+        .f-pill {
+            padding: 6px 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .f-pill.active { border-color: var(--accent); background: rgba(16, 185, 129, 0.2); color: var(--accent); }
+
+        .preview-card {
+            background: linear-gradient(135deg, #0c132b 0%, #171038 100%);
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .s-title { font-family: 'Amiri Quran', serif; font-size: 1.6rem; color: #fff; direction: rtl; }
+
+        .text-box {
+            width: 100%;
+            background: rgba(5, 8, 20, 0.7);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .box-head { font-size: 0.65rem; color: var(--accent); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        
+        .ar-view { font-family: 'Amiri Quran', serif; font-size: 1.5rem; line-height: 2.2; color: #fff; direction: rtl; width: 100%; }
+        .tr-view { font-family: 'Noto Nastaliq Urdu', serif; font-size: 1.1rem; line-height: 2.2; color: #e2e8f0; direction: rtl; width: 100%; }
+
+        .main-btn {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: #fff;
+            border: none;
+            padding: 11px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.75rem;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sm-btn {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrap">
+        <div class="box" style="text-align: center; font-size: 0.7rem; color: #94a3b8; line-height: 1.5;">
+            <h1 style="font-size: 1.2rem; color: #fff; margin-bottom: 2px; font-weight: 800;">Ayah Studio Pro</h1>
+            <div style="font-size: 0.7rem; color: var(--accent); font-weight: bold; margin-bottom: 6px;">By Muhammad Zaki</div>
+            <p>Asalam Alykom! Create beautiful Quran video clips with clean ayah separation and multi-language support.</p>
+        </div>
+
+        <div class="box">
+            <div class="lbl">Choose Surah and Ayah, then copy text or translation.</div>
+            <div class="row">
+                <select id="surahOpt"></select>
+                <select id="ayahOpt" style="max-width: 110px;"></select>
+            </div>
+
+            <div class="row">
+                <select id="langOpt">
+                    <option value="ur.jalandhry">Urdu (Fateh Muhammad Jalandhry)</option>
+                    <option value="en.sahih">English (Sahih International)</option>
+                    <option value="hi.hindi">Hindi (Suhaib & Bilal)</option>
+                    <option value="bn.bengali">Bengali (Zohurul Hoque)</option>
+                </select>
+            </div>
+
+            <div class="fonts-grid" id="mainFontTabs" style="margin-top: 4px;">
+                <button class="f-pill active" onclick="switchFontCat('ar', this)">Arabic Fonts</button>
+                <button class="f-pill" onclick="switchFontCat('ur', this)">Urdu Fonts</button>
+                <button class="f-pill" onclick="switchFontCat('en', this)">English Fonts</button>
+            </div>
+
+            <div class="fonts-grid" id="cat-ar" style="margin-top: 4px;">
+                <button class="f-pill active" onclick="changeArFont(this, 'Amiri Quran')">Amiri Uthmani</button>
+                <button class="f-pill" onclick="changeArFont(this, 'Scheherazade New')">Scheherazade</button>
+                <button class="f-pill" onclick="changeArFont(this, 'Noto Naskh Arabic')">Noto Naskh</button>
+                <button class="f-pill" onclick="changeArFont(this, 'Cairo')">Cairo Bold</button>
+            </div>
+
+            <div class="fonts-grid" id="cat-ur" style="display:none; margin-top: 4px;">
+                <button class="f-pill active" onclick="changeTrFont(this, 'Noto Nastaliq Urdu', 'ur')">Noto Nastaliq</button>
+                <button class="f-pill" onclick="changeTrFont(this, 'Gulzar', 'ur')">Gulzar</button>
+            </div>
+
+            <div class="fonts-grid" id="cat-en" style="display:none; margin-top: 4px;">
+                <button class="f-pill active" onclick="changeTrFont(this, 'Inter', 'en')">Inter</button>
+                <button class="f-pill" onclick="changeTrFont(this, 'Poppins', 'en')">Poppins</button>
+            </div>
+
+            <div class="row" style="margin-top: 4px;">
+                <button class="main-btn" id="prevB" style="background:#334155;">Prev Ayah</button>
+                <button class="main-btn" id="nextB" style="background:#334155;">Next Ayah</button>
+            </div>
+        </div>
+
+        <div class="preview-card" id="renderArea">
+            <div class="s-title" id="headTitle">سُورَةُ الفَاتِحَةِ</div>
+
+            <div class="text-box">
+                <div class="box-head">
+                    <span>Arabic Text</span>
+                    <button class="sm-btn" id="copyAr">Copy</button>
+                </div>
+                <div class="ar-view" id="arBox">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ﴿١﴾</div>
+            </div>
+
+            <div class="text-box">
+                <div class="box-head">
+                    <span id="trTitleType">Urdu Translation</span>
+                    <button class="sm-btn" id="copyTr">Copy</button>
+                </div>
+                <div class="tr-view" id="trBox">شروع اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <button class="main-btn" id="copyAll" style="background: linear-gradient(135deg, #7c3aed, #4c1d95);">📋 Copy All</button>
+            <button class="main-btn" id="dlBtn" style="background: linear-gradient(135deg, #2563eb, #1e40af);">📥 Download Image</button>
+        </div>
+
+        <div class="box" style="text-align: center; gap: 6px;">
+            <div class="lbl" style="text-align: center;">Support Developer</div>
+            <p style="font-size: 0.7rem; color: #94a3b8;">Help sustain this free resource with a small donation, jazakum Allahu khayran.</p>
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--accent); padding: 8px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; color: #34d399;" dir="ltr">
+                📱 JazzCash / WhatsApp: +923436696170
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const surahArabicNames = [
+            "الفَاتِحَةِ", "البَقَرَةِ", "آلِ عِمْرَانَ", "النِّسَاءِ", "المَائِدَةِ", "الأَنْعَامِ", "الأَعْرَافِ", "الأَنْفَالِ", "التَّوْبَةِ", "يُونُسَ",
+            "هُودٍ", "يُوسُفَ", "الرَّعْدِ", "إِبْرَاهِيمَ", "الحِجْرِ", "النَّحْلِ", "الإِسْرَاءِ", "الكَهْفِ", "مَرْيَمَ", "طَهَ",
+            "الأَنْبِيَاءِ", "الحَجِّ", "المُؤْمِنُونَ", "النُّورِ", "الفُرْقَانِ", "الشُّعَرَاءِ", "النَّمْلِ", "القَصَصِ", "العَنْكَبُوتِ", "الرُّومِ",
+            "لُقْمَانَ", "السَّجْدَةِ", "الأَحْزَابِ", "سَبَإٍ", "فَاطِرٍ", "يَاسِين", "الصَّافَّاتِ", "ص", "الزُّمَرِ", "غَافِرٍ",
+            "فُصِّلَتْ", "الشُّورَى", "الزُّخْرُفِ", "الدُّخَانِ", "الجَاثِيَةِ", "الأَحْقَافِ", "مُحَمَّدٍ", "الفَتْحِ", "الحُجُرَاتِ", "ق",
+            "الذَّارِيَاتِ", "الطُّورِ", "النَّجْمِ", "القَمَرِ", "الرَّحْمَٰنِ", "الوَاقِعَةِ", "الحَدِيدِ", "المُجَادَلَةِ", "الحَشْرِ", "المُمْتَحَنَةِ",
+            "الصَّفِّ", "الجُمُعَةِ", "المُنَافِقُونَ", "التَّغَابُنِ", "الطَّلَاقِ", "التَّحْرِيمِ", "المُلْكِ", "القَلَمِ", "الحَاقَّةِ", "المَعَارِجِ",
+            "نُوحٍ", "الجِنِّ", "المُزَّمِّلِ", "المُدَّثِّرِ", "القِيَامَةِ", "الإِنْسَانِ", "المُرْسَلَاتِ", "النَّبَأِ", "النَّازِعَاتِ", "عَبَسَ",
+            "التَّكْوِيرِ", "الانفِطَارِ", "المُطَفَّفِينَ", "الانشِقَاقِ", "البُرُوجِ", "الطَّارِقِ", "الأَعْلَى", "الغَاشِيَةِ", "الفَجْرِ", "البَلَدِ",
+            "الشَّمْسِ", "اللَّيْلِ", "الضُّحَى", "الشَّرْحِ", "التِّينِ", "العَلَقِ", "القَدْرِ", "البَيِّنَةِ", "الزَّلْزَلَةِ", "العَادِيَاتِ",
+            "القَارِعَةِ", "التَّكَاثُرِ", "العَصْرِ", "الهُمَزَةِ", "الفِيلِ", "قُرَيْشٍ", "المَاعُونِ", "الكَوْثَرِ", "الكَافِرُونَ", "النَّصْرِ",
+            "المَسَدِ", "الإِخْلَاصِ", "الفَلَقِ", "النَّاسِ"
+        ];
+
+        const surahEnglishList = [
+            "Al-Fatiha","Al-Baqara","Aal-i-Imran","An-Nisa","Al-Maida","An-An'am","Al-A'raf","An-Anfal","At-Tawba","Yunus",
+            "Hud","Yusuf","Ar-Ra'd","Ibrahim","Al-Hijr","An-Nahl","Al-Isra","Al-Kahf","Maryam","Taha",
+            "Al-Anbiya","Al-Hajj","Al-Mu'minun","An-Nur","An-Furqan","Ash-Shu'ara","An-Naml","An-Qasas","Ankabut","Ar-Rum",
+            "Luqman","As-Sajda","Al-Ahzab","Saba","Fatir","Ya-Seen","As-Saffat","Sad","Az-Zumar","Ghafir",
+            "Fussilat","Ash-Shura","Az-Zukhruf","Ad-Dukhan","Al-Jathiya","Al-Ahqaf","Muhammad","Al-Fath","Al-Hujurat","Qaf",
+            "Adh-Dhariyat","At-Tur","An-Najm","Al-Qamar","Ar-Rahman","Al-Waqi'a","Al-Hadid","Al-Mujadila","Al-Hashr","Al-Mumtahana",
+            "As-Saff","Al-Jumu'a","Al-Munafiqun","At-Taghabun","At-Talaq","At-Tahrim","Al-Mulk","Al-Qalam","Al-Haaqqa","Ma'arij",
+            "Nuh","Al-Jinn","Muzzammil","Muddaththir","Al-Qiyama","Al-Insan","Mursalat","An-Naba","Nazi'at","Abasa",
+            "At-Takwir","Infitar","Mutaffifin","Inshiqaq","Burooj","At-Tariq","Al-A'la","Ghashiya","Al-Fajr","Al-Balad",
+            "Ash-Shams","Al-Lail","Ad-Duha","Ash-Sharh","At-Tin","Al-Alaq","Al-Qadr","Bayyina","Zalzala","Adiyat",
+            "Qaria","Takathur","Al-Asr","Humaza","Al-Fil","Quraish","Al-Ma'un","Kawthar","Kafiroun","An-Nasr",
+            "Masad","Ikhlas","Al-Falaq","An-Nas"
+        ];
+
+        const sSel = document.getElementById('surahOpt');
+        const aSel = document.getElementById('ayahOpt');
+        const langOpt = document.getElementById('langOpt');
+        const arBox = document.getElementById('arBox');
+        const trBox = document.getElementById('trBox');
+        const headTitle = document.getElementById('headTitle');
+        const trTitleType = document.getElementById('trTitleType');
+
+        let htmlOptions = '';
+        for(let i=0; i<114; i++) {
+            htmlOptions += `<option value="${i+1}">${i+1}. ${surahEnglishList[i]}</option>`;
+        }
+        sSel.innerHTML = htmlOptions;
+
+        async function fetchAyahData() {
+            const sNum = sSel.value;
+            const aNum = aSel.value;
+            const edition = langOpt.value;
+            const sIdx = parseInt(sNum) - 1;
+
+            headTitle.innerHTML = `سُورَةُ ${surahArabicNames[sIdx]}`;
+            arBox.innerText = "لوڈ ہو رہا ہے...";
+            trBox.innerText = "لوڈ ہو رہا ہے...";
+
+            try {
+                const arRes = await fetch(`https://api.alquran.cloud/v1/ayah/${sNum}:${aNum}/editions/quran-uthmani`);
+                const arData = await arRes.json();
+                if(arData.code === 200) {
+                    let txt = arData.data[0].text;
+                    // Remove Bismillah if combined in Ayah 1 (except Surah Al-Fatiha & At-Tawbah)
+                    if(aNum === "1" && sNum !== "1" && sNum !== "9") {
+                        txt = txt.replace(/^بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\s*/, '');
+                    }
+                    arBox.innerText = txt + ` ﴿${aNum}﴾`;
+                }
+
+                const trRes = await fetch(`https://api.alquran.cloud/v1/ayah/${sNum}:${aNum}/${edition}`);
+                const trData = await trRes.json();
+                if(trData.code === 200) {
+                    trBox.innerText = trData.data.text;
+                    
+                    const langCode = edition.split('.')[0];
+                    if(langCode === 'ur' || langCode === 'hi') {
+                        trBox.style.direction = 'rtl';
+                    } else {
+                        trBox.style.direction = 'ltr';
+                    }
+
+                    const labels = {
+                        'ur.jalandhry': 'Urdu Translation',
+                        'en.sahih': 'English Translation',
+                        'hi.hindi': 'Hindi Translation',
+                        'bn.bengali': 'Bengali Translation'
+                    };
+                    trTitleType.innerText = labels[edition] || 'Translation';
+                }
+            } catch (error) {
+                arBox.innerText = `بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ﴿${aNum}﴾`;
+                trBox.innerText = "انٹرنیٹ کنکشن چیک کریں یا دوبارہ کوشش کریں۔";
+            }
+        }
+
+        async function updateAyahsCount() {
+            const sNum = sSel.value;
+            try {
+                const res = await fetch(`https://api.alquran.cloud/v1/surah/${sNum}`);
+                const data = await res.json();
+                if(data.code === 200) {
+                    const totalAyahs = data.data.numberOfAyahs;
+                    let opts = '';
+                    for(let i=1; i<=totalAyahs; i++) {
+                        opts += `<option value="${i}">Ayah ${i}</option>`;
+                    }
+                    aSel.innerHTML = opts;
+                    fetchAyahData();
+                }
+            } catch (e) {
+                aSel.innerHTML = `<option value="1">Ayah 1</option>`;
+                fetchAyahData();
+            }
+        }
+
+        sSel.addEventListener('change', updateAyahsCount);
+        aSel.addEventListener('change', fetchAyahData);
+        langOpt.addEventListener('change', fetchAyahData);
+
+        function switchFontCat(cat, btn) {
+            document.getElementById('cat-ar').style.display = 'none';
+            document.getElementById('cat-ur').style.display = 'none';
+            document.getElementById('cat-en').style.display = 'none';
+            
+            document.querySelectorAll('#mainFontTabs .f-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            document.getElementById('cat-' + cat).style.display = 'flex';
+        }
+
+        function changeArFont(btn, fontName) {
+            document.querySelectorAll('#cat-ar .f-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            arBox.style.fontFamily = `'${fontName}', serif`;
+        }
+
+        function changeTrFont(btn, fontName, langType) {
+            let parentId = btn.parentElement.id;
+            document.querySelectorAll('#' + parentId + ' .f-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if(langType === 'en') {
+                trBox.style.fontFamily = `'${fontName}', sans-serif`;
+            } else {
+                trBox.style.fontFamily = `'${fontName}', serif`;
+            }
+        }
+
+        document.getElementById('nextB').onclick = () => {
+            let cur = parseInt(aSel.value);
+            if(cur < aSel.options.length) { 
+                aSel.value = cur + 1; 
+                fetchAyahData(); 
+            }
+        };
+
+        document.getElementById('prevB').onclick = () => {
+            let cur = parseInt(aSel.value);
+            if(cur > 1) { 
+                aSel.value = cur - 1; 
+                fetchAyahData(); 
+            }
+        };
+
+        document.getElementById('copyAr').onclick = () => navigator.clipboard.writeText(arBox.innerText);
+        document.getElementById('copyTr').onclick = () => navigator.clipboard.writeText(trBox.innerText);
+        document.getElementById('copyAll').onclick = () => {
+            navigator.clipboard.writeText(`${headTitle.innerText}\n\n${arBox.innerText}\n\n${trBox.innerText}`);
+            alert('Copied successfully!');
+        };
+
+        document.getElementById('dlBtn').onclick = () => {
+            html2canvas(document.getElementById('renderArea'), { scale: 3, backgroundColor: '#0c132b' }).then(canvas => {
+                const a = document.createElement('a');
+                a.download = `Ayah_${sSel.value}_${aSel.value}.png`;
+                a.href = canvas.toDataURL();
+                a.click();
+            });
+        };
+
+        updateAyahsCount();
+    </script>
+</body>
+</html>
